@@ -5,10 +5,12 @@
  */
 package multicast.cliente;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import multicast.lib.ZipUtils;
 
 /**
  *
@@ -17,27 +19,37 @@ import java.util.logging.Logger;
 public class HiloCompresor extends Thread {
 
     private LinkedList<String> listaSelecionados;
-    private LinkedList<String> listaComprimidos;
+    private Contenedor listaComprimidos;
 
-    public HiloCompresor(LinkedList<String> listaSelecionados, LinkedList<String> listaComprimidos) {
+    public HiloCompresor(LinkedList<String> listaSelecionados, Contenedor listaComprimidos) {
         this.listaSelecionados = listaSelecionados; // Ficheros seleccionados
         this.listaComprimidos = listaComprimidos; // Ficheros compridos
     }
 
     @Override
     public void run() {
-        String next;
+        String next, nombreFicheroComprimido;
         int c =1;
+        ZipUtils appZip = null;
         
         // Comprime archivos
         try {
             for (Iterator<String> iterator = listaSelecionados.iterator(); iterator.hasNext();) {
-                next = iterator.next();
-                System.out.println("Comprimiendo " + next);
-                sleep(15000);
-                listaComprimidos.add("File" + (c++) + ".zip");
+                next = iterator.next();                
+                nombreFicheroComprimido = "File" + (c++) + ".zip";                
+                listaComprimidos.escribir(nombreFicheroComprimido);                
+                //System.out.println("Comprimiendo " + next + " en fichero " + nombreFicheroComprimido);                
+                appZip = new ZipUtils(nombreFicheroComprimido);
+                // Le pasamos los distintos directorios
+                appZip.setSource_folder(next);
+                appZip.generateFileList(new File(next)); 
+                appZip.zipIt(appZip.getOutput_zip_file());
             }
-        } catch (InterruptedException ex) {
+        
+            
+
+            
+        } catch (Exception ex) {
             Logger.getLogger(HiloCompresor.class.getName()).log(Level.SEVERE, null, ex);
         }
 

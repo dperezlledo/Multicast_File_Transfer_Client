@@ -14,20 +14,23 @@ import java.util.LinkedList;
 public class HiloPrincipal extends Thread{
     private Thread hiloCompresor;
     private Thread hiloEnvio;    
+    private LinkedList<String> listaSelecionados;
+    private Contenedor listaComprimidos;
+
+    public HiloPrincipal(LinkedList<String> listaSelecionados) {
+        this.listaSelecionados = listaSelecionados;
+        listaComprimidos = new Contenedor();
+    }
+       
     
     @Override
     public void run() {
-        LinkedList<String> listaSelecionados = new LinkedList();
-        LinkedList<String> listaComprimidos  = new LinkedList();
-        
-        listaSelecionados.add("C:\\tmp\\dir1");
-        listaSelecionados.add("C:\\tmp\\dir2");
-        
+                
         // Arrancamos hilos
         hiloCompresor = new HiloCompresor(listaSelecionados, listaComprimidos);        
-        hiloEnvio = new HiloEnvio(listaComprimidos);
-        hiloEnvio.start();
+        hiloEnvio = new HiloEnvio(listaComprimidos);        
         hiloCompresor.start();
+        hiloEnvio.start();
         
         
     }
