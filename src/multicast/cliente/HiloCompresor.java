@@ -36,14 +36,15 @@ public class HiloCompresor extends Thread {
         try {
             for (Iterator<String> iterator = listaSelecionados.iterator(); iterator.hasNext();) {
                 next = iterator.next();                
-                nombreFicheroComprimido = "File" + (c++) + ".zip";                
-                listaComprimidos.escribir(nombreFicheroComprimido);                
+                nombreFicheroComprimido = "File" + (c++) + ".zip";                             
                 //System.out.println("Comprimiendo " + next + " en fichero " + nombreFicheroComprimido);                
+                 listaComprimidos.escribir(nombreFicheroComprimido);
                 appZip = new ZipUtils(nombreFicheroComprimido);
                 // Le pasamos los distintos directorios
                 appZip.setSource_folder(next);
                 appZip.generateFileList(new File(next)); 
                 appZip.zipIt(appZip.getOutput_zip_file());
+               
             }
         
             

@@ -43,9 +43,14 @@ public class HiloEnvio extends Thread {
         while (true) {
             try {
                 ficheroAEnviar = listaComprimidos.datoAConsumir;
-                listaComprimidos.borrar();
-                System.out.println("Enviando " + ficheroAEnviar);
-                enviarFichero(ficheroAEnviar);
+                if (ficheroAEnviar!=null) {
+                    listaComprimidos.borrar();
+                    System.out.println("Enviando " + ficheroAEnviar);                
+                    enviarFichero(ficheroAEnviar);
+                } else {
+                    sleep(500);
+                }
+                    
             } catch (Exception ex) {
                 Logger.getLogger(HiloEnvio.class.getName()).log(Level.SEVERE, null, ex);
             }
