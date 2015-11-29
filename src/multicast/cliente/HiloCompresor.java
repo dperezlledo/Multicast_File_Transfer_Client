@@ -19,9 +19,9 @@ import multicast.lib.ZipUtils;
 public class HiloCompresor extends Thread {
 
     private LinkedList<String> listaSelecionados;
-    private Contenedor listaComprimidos;
+    private  LinkedList<String> listaComprimidos;
 
-    public HiloCompresor(LinkedList<String> listaSelecionados, Contenedor listaComprimidos) {
+    public HiloCompresor(LinkedList<String> listaSelecionados, LinkedList<String> listaComprimidos) {
         this.listaSelecionados = listaSelecionados; // Ficheros seleccionados
         this.listaComprimidos = listaComprimidos; // Ficheros compridos
     }
@@ -38,18 +38,15 @@ public class HiloCompresor extends Thread {
                 next = iterator.next();                
                 nombreFicheroComprimido = "File" + (c++) + ".zip";                             
                 //System.out.println("Comprimiendo " + next + " en fichero " + nombreFicheroComprimido);                
-                 listaComprimidos.escribir(nombreFicheroComprimido);
                 appZip = new ZipUtils(nombreFicheroComprimido);
                 // Le pasamos los distintos directorios
                 appZip.setSource_folder(next);
                 appZip.generateFileList(new File(next)); 
                 appZip.zipIt(appZip.getOutput_zip_file());
-               
+                // Añadimos a la bandeja de salida
+                listaComprimidos.add(nombreFicheroComprimido);               
             }
         
-            
-
-            
         } catch (Exception ex) {
             Logger.getLogger(HiloCompresor.class.getName()).log(Level.SEVERE, null, ex);
         }

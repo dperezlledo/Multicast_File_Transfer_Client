@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.*;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,14 +19,14 @@ import java.util.logging.Logger;
  */
 public class HiloEnvio extends Thread {
 
-    private Contenedor listaComprimidos;
+    private LinkedList<String> listaComprimidos;
     private MulticastSocket enviador;
     public static final String INET_ADDR = "224.0.0.3";
     public static final int PORT = 8888;
     private InetAddress addr;
     private DatagramSocket serverSocket;
     
-    public HiloEnvio(Contenedor listaComprimidos) {
+    public HiloEnvio(LinkedList<String> listaComprimidos) {
         try {
             this.listaComprimidos = listaComprimidos; // Ficheros compridos
             // Nos creamos la conexion
@@ -41,12 +42,11 @@ public class HiloEnvio extends Thread {
         String ficheroAEnviar;
 
         while (true) {
-            try {
-                ficheroAEnviar = listaComprimidos.datoAConsumir;
-                if (ficheroAEnviar!=null) {
-                    listaComprimidos.borrar();
-                    System.out.println("Enviando " + ficheroAEnviar);                
+            try {                
+                if (!listaComprimidos.isEmpty()) {
+                    ficheroAEnviar = listaComprimidos.removeFirst();
                     enviarFichero(ficheroAEnviar);
+                    System.out.println("Enviado " + ficheroAEnviar);
                 } else {
                     sleep(500);
                 }
@@ -57,9 +57,12 @@ public class HiloEnvio extends Thread {
         }
     }
 
+
     private void enviarFichero(String ficheroAEnviar) {
         int leidos;
         byte[] datos = new byte[1024];
+        DatagramPacket msgPacket;
+        byte fin[] = new byte[] {-1};
         
         try {            
             // Se abre el fichero original para lectura
@@ -68,11 +71,13 @@ public class HiloEnvio extends Thread {
                                    
             leidos = bufferedInput.read(datos);
             while (leidos > 0) {
-                DatagramPacket msgPacket = new DatagramPacket(datos,datos.length, addr, PORT);
+                msgPacket = new DatagramPacket(datos,datos.length, addr, PORT);
                 serverSocket.send(msgPacket);                
                 leidos=bufferedInput.read(datos);
             }
- 
+            // Aviso de fin de fichero
+            msgPacket = new DatagramPacket(fin,1, addr, PORT);
+            serverSocket.send(msgPacket);  
             // Cierre de los ficheros
             bufferedInput.close();
         } catch (UnknownHostException ex) {

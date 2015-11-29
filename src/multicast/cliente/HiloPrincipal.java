@@ -15,11 +15,11 @@ public class HiloPrincipal extends Thread{
     private Thread hiloCompresor;
     private Thread hiloEnvio;    
     private LinkedList<String> listaSelecionados;
-    private Contenedor listaComprimidos;
+    private LinkedList<String> listaComprimidos;
 
     public HiloPrincipal(LinkedList<String> listaSelecionados) {
         this.listaSelecionados = listaSelecionados;
-        listaComprimidos = new Contenedor();
+        listaComprimidos = new LinkedList<String>();
     }
        
     

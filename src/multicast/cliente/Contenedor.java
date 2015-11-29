@@ -10,46 +10,43 @@ import java.util.LinkedList;
 public class Contenedor {
 
     // Atributos.
-    public String datoAConsumir = null;
+    public LinkedList<String> datoAConsumir;
     private boolean sw = false;    
 
- // Métodos.
+    public Contenedor() {
+        datoAConsumir = new LinkedList();
+    }
+    
+    // Métodos.
     public synchronized void escribir(String param) {
 
         try {
-
             if (sw) {
                 wait();
             }
-
-        } catch (InterruptedException ex) {
-
-        }
-
-        
-        datoAConsumir = param;
+        } catch (InterruptedException ex) {  }        
+        datoAConsumir.add(param);        
         sw = true;
         notify();
 
     }
 
     public synchronized void borrar() {
-
         try {
-
             if (!sw) {
                 wait();
             }
-
-        } catch (InterruptedException ex) {
-
-        }
-
-        
-        sw = false;        
-        datoAConsumir = null;
+        } catch (InterruptedException ex) { }       
+        datoAConsumir.removeLast();
+        sw = false;                
         notify();
 
     }
+
+    public LinkedList<String> getDatoAConsumir() {
+        return datoAConsumir;
+    }
+
+  
 
 }
