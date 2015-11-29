@@ -6,6 +6,8 @@
 package multicast.cliente;
 
 import java.util.LinkedList;
+import multicast.cliente.gui.JFrameMain;
+import multicast.lib.Log;
 
 /**
  *
@@ -16,19 +18,21 @@ public class HiloPrincipal extends Thread{
     private Thread hiloEnvio;    
     private LinkedList<String> listaSelecionados;
     private LinkedList<String> listaComprimidos;
+    private JFrameMain ventana;
+    private Log log;
 
-    public HiloPrincipal(LinkedList<String> listaSelecionados) {
+    public HiloPrincipal(LinkedList<String> listaSelecionados, JFrameMain ventana) {
         this.listaSelecionados = listaSelecionados;
-        listaComprimidos = new LinkedList<String>();
+        listaComprimidos = new LinkedList<String>();    
+        log = new Log(ventana.getJTextAreaLog());
     }
        
     
     @Override
-    public void run() {
-                
+    public void run() {                
         // Arrancamos hilos
-        hiloCompresor = new HiloCompresor(listaSelecionados, listaComprimidos);        
-        hiloEnvio = new HiloEnvio(listaComprimidos);        
+        hiloCompresor = new HiloCompresor(listaSelecionados, listaComprimidos, log);        
+        hiloEnvio = new HiloEnvio(listaComprimidos, log);        
         hiloCompresor.start();
         hiloEnvio.start();
         

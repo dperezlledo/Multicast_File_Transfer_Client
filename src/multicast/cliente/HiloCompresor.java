@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextArea;
+import multicast.cliente.gui.JFrameMain;
+import multicast.lib.Log;
 import multicast.lib.ZipUtils;
 
 /**
@@ -19,11 +22,13 @@ import multicast.lib.ZipUtils;
 public class HiloCompresor extends Thread {
 
     private LinkedList<String> listaSelecionados;
-    private  LinkedList<String> listaComprimidos;
+    private LinkedList<String> listaComprimidos;
+    private Log  jtxtLog;
 
-    public HiloCompresor(LinkedList<String> listaSelecionados, LinkedList<String> listaComprimidos) {
+    public HiloCompresor(LinkedList<String> listaSelecionados, LinkedList<String> listaComprimidos, Log log) {
         this.listaSelecionados = listaSelecionados; // Ficheros seleccionados
         this.listaComprimidos = listaComprimidos; // Ficheros compridos
+        this.jtxtLog = log;
     }
 
     @Override
@@ -36,9 +41,8 @@ public class HiloCompresor extends Thread {
         try {
             for (Iterator<String> iterator = listaSelecionados.iterator(); iterator.hasNext();) {
                 next = iterator.next();                
-                nombreFicheroComprimido = "File" + (c++) + ".zip";                             
-                //System.out.println("Comprimiendo " + next + " en fichero " + nombreFicheroComprimido);                
-                appZip = new ZipUtils(nombreFicheroComprimido);
+                nombreFicheroComprimido = "File" + (c++) + ".zip";           
+                appZip = new ZipUtils(nombreFicheroComprimido, jtxtLog);
                 // Le pasamos los distintos directorios
                 appZip.setSource_folder(next);
                 appZip.generateFileList(new File(next)); 

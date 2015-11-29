@@ -6,10 +6,14 @@
 package multicast.cliente.gui;
 
 
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import java.util.Iterator;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import multicast.cliente.HiloPrincipal;
 
 /**
@@ -19,14 +23,20 @@ import multicast.cliente.HiloPrincipal;
 public class JFrameMain extends javax.swing.JFrame {
 
     private LinkedList<String> listaDirectorios;
+    private JTextArea JTextAreaLog;
 
     /**
      * Creates new form JFrameMain
      */
     public JFrameMain() {
         initComponents();
-        listaDirectorios = new LinkedList();
-        //listaDirectorios.add("/home/dapelle/tmp");
+        listaDirectorios = new LinkedList();        
+        jButtonSend.setEnabled(false);
+         // Creamos la ventana de log
+        JTextAreaLog = new JTextArea(20,40);
+        JTextAreaLog.setBackground(Color.BLACK);
+        JTextAreaLog.setForeground(Color.WHITE);        
+        jPanel1.add(JTextAreaLog, "log");
     }
 
     /**
@@ -45,32 +55,23 @@ public class JFrameMain extends javax.swing.JFrame {
         jButtonAdd = new javax.swing.JButton();
         jButtonRemove = new javax.swing.JButton();
         jButtonSend = new javax.swing.JButton();
+        jButtonSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Multicast versión 0.9");
 
+        jPanel1.setLayout(new java.awt.CardLayout());
+
+        jTreeDir.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("vacío");
         jTreeDir.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(jTreeDir);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 12, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel1.add(jScrollPane1, "card2");
 
-        jPanel2.setLayout(new java.awt.GridLayout(3, 1, 50, 5));
+        jPanel2.setLayout(new java.awt.GridLayout(4, 1, 50, 10));
 
+        jButtonAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/multicast/gfx/add.png"))); // NOI18N
         jButtonAdd.setText("Add");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,6 +80,7 @@ public class JFrameMain extends javax.swing.JFrame {
         });
         jPanel2.add(jButtonAdd);
 
+        jButtonRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/multicast/gfx/remove.png"))); // NOI18N
         jButtonRemove.setText("Remove");
         jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,6 +89,7 @@ public class JFrameMain extends javax.swing.JFrame {
         });
         jPanel2.add(jButtonRemove);
 
+        jButtonSend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/multicast/gfx/send.png"))); // NOI18N
         jButtonSend.setText("Send");
         jButtonSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,26 +98,29 @@ public class JFrameMain extends javax.swing.JFrame {
         });
         jPanel2.add(jButtonSend);
 
+        jButtonSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/multicast/gfx/exit.png"))); // NOI18N
+        jButtonSalir.setText("Exit");
+        jButtonSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonSalir);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
         );
 
         pack();
@@ -140,7 +146,7 @@ public class JFrameMain extends javax.swing.JFrame {
         try {
             String aux = jTreeDir.getSelectionPath().getLastPathComponent().toString();
             if (!aux.isEmpty()) {                
-                listaDirectorios.remove(aux);
+                listaDirectorios.remove(aux);                
                 cargaNodos();
             }
         } catch (Exception e) {
@@ -157,10 +163,21 @@ public class JFrameMain extends javax.swing.JFrame {
         }
         return sb.toString();
     }
+
+    public JTextArea getJTextAreaLog() {
+        return JTextAreaLog;
+    }
     
-        
+    
+            
     private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
-        Thread hp = new HiloPrincipal(listaDirectorios);   
+        jButtonAdd.setEnabled(false);
+        jButtonRemove.setEnabled(false);
+        jButtonSend.setEnabled(false);         
+        
+        CardLayout layout = (CardLayout) jPanel1.getLayout();
+        layout.show(jPanel1, "log");        
+        Thread hp = new HiloPrincipal(listaDirectorios, this);   
         hp.start();
         
         // Llamada al sistema que empaqueta y envia con udp-send
@@ -211,6 +228,11 @@ public class JFrameMain extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonSendActionPerformed
 
+    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
+        JOptionPane.showMessageDialog(this, "Multicast versión 0.9 \n\nColaboración realizada para el IES Comercio de Logroño\nDavid Pérez Lledó", "Acerca de Multicast...", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);        
+    }//GEN-LAST:event_jButtonSalirActionPerformed
+
     private void cargaNodos() {
         String next;
 
@@ -222,6 +244,10 @@ public class JFrameMain extends javax.swing.JFrame {
         }
 
         jTreeDir.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        if (listaDirectorios.isEmpty())
+           jButtonSend.setEnabled(false);
+        else 
+           jButtonSend.setEnabled(true);
     }
 
     /**
@@ -267,6 +293,7 @@ public class JFrameMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonRemove;
+    private javax.swing.JButton jButtonSalir;
     private javax.swing.JButton jButtonSend;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

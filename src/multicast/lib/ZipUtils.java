@@ -20,11 +20,12 @@ public class ZipUtils {
     private List<String> fileList;
     private String output_zip_file;
     private String source_folder;
+    private Log jtxtLog;
 
-    public ZipUtils(String output_zip_file) {
+    public ZipUtils(String output_zip_file, Log jtxtLog) {
         fileList = new ArrayList();
         this.output_zip_file = output_zip_file;
-   
+        this.jtxtLog = jtxtLog;
     }
 
     public String getOutput_zip_file() {
@@ -64,11 +65,11 @@ public class ZipUtils {
             fos = new FileOutputStream(zipFile);
             zos = new ZipOutputStream(fos);
 
-            System.out.println("Guardando en fichero Zip : " + zipFile);
+            //System.out.println("Guardando en fichero Zip : " + zipFile);
             FileInputStream in = null;
 
             for (String file : this.fileList) {
-                System.out.println("Fichero añadido : " + file);
+                jtxtLog.añadir("Comprimiendo fichero ");
                 
                 ZipEntry ze = new ZipEntry(source + File.separator + file);                
                 zos.putNextEntry(ze);
@@ -84,7 +85,7 @@ public class ZipUtils {
             }
 
             zos.closeEntry();
-            System.out.println("Directorio comprimido correctamente");
+            jtxtLog.añadir("Directorio comprimido correctamente");
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -117,7 +118,7 @@ public class ZipUtils {
             aux = file.substring(source_folder.length() + 1, file.length());
             return aux;
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            jtxtLog.añadir("Error: " + e.getMessage());
             return null;
         }
         
