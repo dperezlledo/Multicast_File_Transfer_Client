@@ -69,7 +69,7 @@ public class ZipUtils {
             FileInputStream in = null;
 
             for (String file : this.fileList) {
-                jtxtLog.añadir("Comprimiendo fichero ");
+                //jtxtLog.añadir("Comprimiendo fichero ");
                 
                 ZipEntry ze = new ZipEntry(source + File.separator + file);                
                 zos.putNextEntry(ze);
@@ -85,7 +85,7 @@ public class ZipUtils {
             }
 
             zos.closeEntry();
-            jtxtLog.añadir("Directorio comprimido correctamente");
+            jtxtLog.añadir(source + " comprimido correctamente");
 
         } catch (IOException ex) {
             ex.printStackTrace();
