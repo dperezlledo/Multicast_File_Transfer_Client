@@ -23,19 +23,19 @@ import multicast.lib.Log;
  */
 public class HiloEnvio extends Thread {
 
-    private LinkedList<String> listaComprimidos;
     private MulticastSocket enviador;
     public static final String INET_ADDR = "224.0.0.3";
     public static final int PORT = 8888;
     private InetAddress addr;
     private DatagramSocket serverSocket;
     private Log log;
-    
-    public HiloEnvio(LinkedList<String> listaComprimidos, Log log) {
+    private String tarPath;
+
+    public HiloEnvio(String tarPath, Log log) {
         try {
-            this.listaComprimidos = listaComprimidos; // Ficheros compridos
+            this.tarPath = tarPath; // Ficheros compridos
             // Nos creamos la conexion
-            addr = InetAddress.getByName(INET_ADDR);         
+            addr = InetAddress.getByName(INET_ADDR);
             serverSocket = new DatagramSocket();
             this.log = log;
         } catch (UnknownHostException | SocketException ex) {
@@ -45,44 +45,25 @@ public class HiloEnvio extends Thread {
 
     @Override
     public void run() {
-        String ficheroAEnviar;
-
-        while (true) {
-            try {                
-                if (!listaComprimidos.isEmpty()) {
-                    ficheroAEnviar = listaComprimidos.removeFirst();
-                    enviarFichero(ficheroAEnviar);
-                    log.añadir("Enviado " + ficheroAEnviar);
-                } else {
-                    sleep(500);
-                }                    
-            } catch (Exception ex) {
-                Logger.getLogger(HiloEnvio.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-
-    private void enviarFichero(String ficheroAEnviar) {
         int leidos;
         byte[] datos = new byte[4096];
         DatagramPacket msgPacket;
-        byte fin[] = new byte[] {-1};
-        
-        try {            
+        byte fin[] = new byte[]{-1};
+
+        try {
             // Se abre el fichero original para lectura            
-            FileInputStream fileInput = new FileInputStream(ficheroAEnviar);                     
+            FileInputStream fileInput = new FileInputStream(this.tarPath);
             BufferedInputStream bufferedInput = new BufferedInputStream(fileInput);
-                                   
+
             leidos = bufferedInput.read(datos);
             while (leidos > 0) {
-                msgPacket = new DatagramPacket(datos,datos.length, addr, PORT);                
-                serverSocket.send(msgPacket);                
-                leidos=bufferedInput.read(datos);
+                msgPacket = new DatagramPacket(datos, datos.length, addr, PORT);
+                serverSocket.send(msgPacket);
+                leidos = bufferedInput.read(datos);
             }
             //  Aviso de fin de fichero
-            msgPacket = new DatagramPacket(fin,1, addr, PORT);
-            serverSocket.send(msgPacket);  
+            msgPacket = new DatagramPacket(fin, 1, addr, PORT);
+            serverSocket.send(msgPacket);
             // Cierre de los ficheros
             bufferedInput.close();
         } catch (UnknownHostException ex) {
@@ -92,7 +73,6 @@ public class HiloEnvio extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(HiloEnvio.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 }
