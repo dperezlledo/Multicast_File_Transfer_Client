@@ -31,12 +31,16 @@ public class HiloPrincipal extends Thread {
 
     @Override
     public void run() {
-        log.añadir("Preparando paquete de envio...");
-        empaquetar_directorios();
-        log.añadir("Paquete preparado!!!");
-        log.añadir("Enviando paquete a los clientes...");
-        Thread he = new HiloEnvio(tarPath, log);   
-        he.start();
+        try {
+            log.añadir("Preparando paquete de envio...");
+            empaquetar_directorios();
+            log.añadir("Paquete preparado!!!");
+            sleep(1000);
+            log.añadir("Enviando paquete a los clientes...");
+            enviar_paquete();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(HiloPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
 
     }
@@ -88,7 +92,7 @@ public class HiloPrincipal extends Thread {
                 File[] children = f.listFiles();
                 if (children != null) {
                     for (File child : children) {
-                        log.añadir(entryName + " añadido al paquete de envio");
+                        log.añadir("añadido: " + child);
                         addFileToTar(tOut, child.getAbsolutePath(), entryName + "/");
                     }
                 }
@@ -116,11 +120,35 @@ public class HiloPrincipal extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(HiloPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }  
 
-    }
+    private void enviar_paquete() {
+        String salida = null; 
+        //String comando = "cmd /c commands/udp-sender -f " + this.tarPath + " --min-receivers 1 --nokbd";
+        String comando = "udp-sender -f " + this.tarPath +" --min-receivers 1 --nokbd";
 
-    private void enviarPaquete() {
-        System.out.println("Enviar paquete no implementado aun");
+        try {
+            while (true) {
+                // Ejecucion Basica del Comando
+                Process proceso = Runtime.getRuntime().exec(comando);
+
+                InputStreamReader entrada = new InputStreamReader(proceso.getInputStream());
+                BufferedReader stdInput = new BufferedReader(entrada);
+
+                //Si el comando tiene una salida la mostramos
+                if ((salida = stdInput.readLine()) != null) {
+                    System.out.println("Comando ejecutado Correctamente");
+                    while ((salida = stdInput.readLine()) != null) {
+                        System.out.println(salida);
+                    }
+                } else {                     
+                    log.añadir("Paquete enviado...");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Excepción: ");
+            e.printStackTrace();
+        }
     }
 
 }

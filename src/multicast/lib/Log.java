@@ -27,6 +27,13 @@ public class Log {
         gui.setText(msg + "\n" + aux);
     }
     
+    public void sout (String msg) {
+        String aux;
+        
+        aux = gui.getText();        
+        gui.append(msg);
+    }
+    
     
     
 }
