@@ -40,9 +40,7 @@ public class HiloPrincipal extends Thread {
             enviar_paquete();
         } catch (InterruptedException ex) {
             Logger.getLogger(HiloPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-
+        }  
     }
 
     private void empaquetar_directorios() {
@@ -124,8 +122,8 @@ public class HiloPrincipal extends Thread {
 
     private void enviar_paquete() {
         String salida = null; 
-        //String comando = "cmd /c commands/udp-sender -f " + this.tarPath + " --min-receivers 1 --nokbd";
-        String comando = "udp-sender -f " + this.tarPath +" --min-receivers 1 --nokbd";
+        String comando = "cmd /c commands\\udp-sender.exe -f " + this.tarPath + " --min-receivers 1 --nokbd";
+        //String comando = "udp-sender -f " + this.tarPath +" --min-receivers 1 --nokbd";
 
         try {
             while (true) {
