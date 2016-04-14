@@ -229,7 +229,7 @@ public class JFrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSendActionPerformed
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-        JOptionPane.showMessageDialog(this, "Multicast versión 0.9 \n\nColaboración realizada para el IES Comercio de Logroño\nDavid Pérez Lledó", "Acerca de Multicast...", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(this, "Multicast versión 0.9 \n\nColaboración realizada para el IES Comercio de Logroño\nDavid Pérez Lledó", "Acerca de Multicast...", JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);        
     }//GEN-LAST:event_jButtonSalirActionPerformed
 

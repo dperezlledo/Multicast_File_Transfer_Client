@@ -1,0 +1,7 @@
+Multicast File transfer versión Servidor es una aplicación que te permitirá la 
+transferencia de archivos en modo multicast para distintos equipos, enviando 
+dichos ficheros en el mismo tiempo que tardaría en envio a un único equipo.
+
+Esta versión servidor se instalará en los equipos de los alumnos de una aula.
+Funciona como servicio de windows por lo que el alumno no podrá interaccionar
+con el sistema de ninguna forma.
