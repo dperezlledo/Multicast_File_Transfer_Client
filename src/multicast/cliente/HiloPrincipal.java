@@ -126,7 +126,7 @@ public class HiloPrincipal extends Thread {
         //String comando = "udp-sender -f " + this.tarPath +" --min-receivers 1 --nokbd";
 
         try {
-            while (true) {
+            //while (true) {
                 // Ejecucion Basica del Comando
                 Process proceso = Runtime.getRuntime().exec(comando);
 
@@ -142,7 +142,7 @@ public class HiloPrincipal extends Thread {
                 } else {                     
                     log.añadir("Paquete enviado...");
                 }
-            }
+            //}
         } catch (IOException e) {
             System.out.println("Excepción: ");
             e.printStackTrace();

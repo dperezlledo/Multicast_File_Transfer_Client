@@ -5,9 +5,10 @@
  */
 package multicast.cliente.gui;
 
-
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
 import java.util.Iterator;
@@ -30,14 +31,19 @@ public class JFrameMain extends javax.swing.JFrame {
      */
     public JFrameMain() {
         initComponents();
-        listaDirectorios = new LinkedList();        
+        listaDirectorios = new LinkedList();
         jButtonSend.setEnabled(false);
-         // Creamos la ventana de log
-        JTextAreaLog = new JTextArea(20,40);
+        // Creamos la ventana de log
+        JTextAreaLog = new JTextArea(20, 40);
         JTextAreaLog.setBackground(Color.BLACK);
-        JTextAreaLog.setForeground(Color.WHITE);        
+        JTextAreaLog.setForeground(Color.WHITE);
         jPanel1.add(JTextAreaLog, "log");
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/multicast/gfx/plug_lan.png"));
+        setIconImage(icon);
+        
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,7 +64,7 @@ public class JFrameMain extends javax.swing.JFrame {
         jButtonSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Multicast versión 0.9");
+        setTitle("Multicast versión 1.0");
 
         jPanel1.setLayout(new java.awt.CardLayout());
 
@@ -145,8 +151,8 @@ public class JFrameMain extends javax.swing.JFrame {
     private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
         try {
             String aux = jTreeDir.getSelectionPath().getLastPathComponent().toString();
-            if (!aux.isEmpty()) {                
-                listaDirectorios.remove(aux);                
+            if (!aux.isEmpty()) {
+                listaDirectorios.remove(aux);
                 cargaNodos();
             }
         } catch (Exception e) {
@@ -157,9 +163,9 @@ public class JFrameMain extends javax.swing.JFrame {
 
     public String cargaDirectorios() {
         StringBuilder sb = new StringBuilder();
-        
+
         for (Iterator<String> iterator = listaDirectorios.iterator(); iterator.hasNext();) {
-            sb.append(iterator.next());          
+            sb.append(iterator.next());
         }
         return sb.toString();
     }
@@ -167,21 +173,19 @@ public class JFrameMain extends javax.swing.JFrame {
     public JTextArea getJTextAreaLog() {
         return JTextAreaLog;
     }
-    
-    
-            
+
+
     private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
         jButtonAdd.setEnabled(false);
         jButtonRemove.setEnabled(false);
-        jButtonSend.setEnabled(false);         
-        
+        jButtonSend.setEnabled(false);
+
         CardLayout layout = (CardLayout) jPanel1.getLayout();
-        layout.show(jPanel1, "log");        
-        Thread hp = new HiloPrincipal(listaDirectorios, this);   
+        layout.show(jPanel1, "log");
+        Thread hp = new HiloPrincipal(listaDirectorios, this);
         hp.start();
-        
+
         // Llamada al sistema que empaqueta y envia con udp-send
-        
 //        String s = null;
 //        String comando = "tar -cvf nombre-archivo.tar " + cargaDirectorios();        
 //        System.out.println("" + comando);
@@ -230,7 +234,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
         //JOptionPane.showMessageDialog(this, "Multicast versión 0.9 \n\nColaboración realizada para el IES Comercio de Logroño\nDavid Pérez Lledó", "Acerca de Multicast...", JOptionPane.INFORMATION_MESSAGE);
-        System.exit(0);        
+        System.exit(0);
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
     private void cargaNodos() {
@@ -244,10 +248,11 @@ public class JFrameMain extends javax.swing.JFrame {
         }
 
         jTreeDir.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        if (listaDirectorios.isEmpty())
-           jButtonSend.setEnabled(false);
-        else 
-           jButtonSend.setEnabled(true);
+        if (listaDirectorios.isEmpty()) {
+            jButtonSend.setEnabled(false);
+        } else {
+            jButtonSend.setEnabled(true);
+        }
     }
 
     /**
