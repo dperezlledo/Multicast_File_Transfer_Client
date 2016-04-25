@@ -15,9 +15,12 @@ import javax.swing.JTextArea;
 public class Log {
     private JTextArea gui;
     private File fichero;
+    private StringBuilder sb;
     
     public Log(JTextArea gui) {
         this.gui = gui;
+        sb = new StringBuilder();
+        gui.setColumns(100);
     }
     
     public void añadir (String msg) {
@@ -27,13 +30,5 @@ public class Log {
         gui.setText(msg + "\n" + aux);
     }
     
-    public void sout (String msg) {
-        String aux;
-        
-        aux = gui.getText();        
-        gui.append(msg);
-    }
-    
-    
-    
+       
 }
