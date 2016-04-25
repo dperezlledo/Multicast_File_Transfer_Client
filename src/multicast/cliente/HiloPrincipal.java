@@ -141,11 +141,6 @@ public class HiloPrincipal extends Thread {
                 JOptionPane.showMessageDialog(this.ventana, "La información ha sido enviada con exito\n Salida: " + exitVal, "Multicast Client 1.0", JOptionPane.INFORMATION_MESSAGE);
             else
                 JOptionPane.showMessageDialog(this.ventana, "Se ha producido un problema en el envio, repita el proceso\nSalida: " + exitVal, "Multicast Client 1.0", JOptionPane.INFORMATION_MESSAGE);
-//            log.añadir("***************************************");            
-//            log.añadir("*          Salida: " + exitVal);
-//            log.añadir("*       PAQUETE ENVIADO ");            
-//            log.añadir("***************************************");           
-            
             
         } catch (IOException e) {
             System.out.println("Excepción: ");
