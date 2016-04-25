@@ -12,9 +12,7 @@ import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
 import java.util.Iterator;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import multicast.cliente.HiloPrincipal;
 
 /**
@@ -23,20 +21,27 @@ import multicast.cliente.HiloPrincipal;
  */
 public class JFrameMain extends javax.swing.JFrame {
 
-    private LinkedList<String> listaDirectorios;
+    private LinkedList<String> listaDirectorios;       
     private JTextArea JTextAreaLog;
+    private JScrollPane scroll;
 
     /**
      * Creates new form JFrameMain
      */
     public JFrameMain() {
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
         listaDirectorios = new LinkedList();
         jButtonSend.setEnabled(false);
         // Creamos la ventana de log
         JTextAreaLog = new JTextArea(20, 40);
         JTextAreaLog.setBackground(Color.BLACK);
         JTextAreaLog.setForeground(Color.WHITE);
+        JTextAreaLog.setEditable(false);        
+        scroll = new JScrollPane(JTextAreaLog);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); 
+        
         jPanel1.add(JTextAreaLog, "log");
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/multicast/gfx/plug_lan.png"));
         setIconImage(icon);
@@ -65,6 +70,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Multicast versión 1.0");
+        setResizable(false);
 
         jPanel1.setLayout(new java.awt.CardLayout());
 
@@ -119,14 +125,14 @@ public class JFrameMain extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

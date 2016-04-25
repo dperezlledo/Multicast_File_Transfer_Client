@@ -34,7 +34,7 @@ public class StreamsComando extends Thread {
             String line = null;
             while ((line = br.readLine()) != null) //System.out.println(type + ">" + line);    
             {
-                System.out.println(line);
+                log.añadir(line);
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();

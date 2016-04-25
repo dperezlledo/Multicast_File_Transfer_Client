@@ -8,6 +8,7 @@ package multicast.cliente;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import javax.swing.JOptionPane;
 import multicast.cliente.gui.JFrameMain;
 import multicast.lib.*;
 import org.xeustechnologies.jtar.*;
@@ -37,6 +38,7 @@ public class HiloPrincipal extends Thread {
             log.añadir("Paquete preparado!!!");
             sleep(1000);
             log.añadir("Enviando paquete a los clientes...");
+            log.añadir("Por favor, espere hasta ventana de fin");
             enviar_paquete();
         } catch (InterruptedException ex) {
             Logger.getLogger(HiloPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,7 +92,7 @@ public class HiloPrincipal extends Thread {
                 File[] children = f.listFiles();
                 if (children != null) {
                     for (File child : children) {
-                        log.añadir("añadido: " + child);
+                        log.añadir("añadiendo: " + child.getName() + " al paquete de envio");
                         addFileToTar(tOut, child.getAbsolutePath(), entryName + "/");
                     }
                 }
@@ -135,10 +137,14 @@ public class HiloPrincipal extends Thread {
             output.start();
             
             int exitVal = proceso.waitFor();
-            log.añadir("***************************************");            
-            log.añadir("*          Salida: " + exitVal);
-            log.añadir("*       PAQUETE ENVIADO ");            
-            log.añadir("***************************************");           
+            if (exitVal==0)
+                JOptionPane.showMessageDialog(this.ventana, "La información ha sido enviada con exito\n Salida: " + exitVal, "Multicast Client 1.0", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(this.ventana, "Se ha producido un problema en el envio, repita el proceso\nSalida: " + exitVal, "Multicast Client 1.0", JOptionPane.INFORMATION_MESSAGE);
+//            log.añadir("***************************************");            
+//            log.añadir("*          Salida: " + exitVal);
+//            log.añadir("*       PAQUETE ENVIADO ");            
+//            log.añadir("***************************************");           
             
             
         } catch (IOException e) {
